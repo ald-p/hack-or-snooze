@@ -9,7 +9,7 @@ async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
 
-  putStoriesOnPage();
+  putStoriesOnPage($allStoriesList);
 }
 
 /**
@@ -37,16 +37,36 @@ function generateStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
-function putStoriesOnPage() {
+function putStoriesOnPage(olEl) {
   console.debug("putStoriesOnPage");
 
-  $allStoriesList.empty();
+  olEl.empty();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
-    $allStoriesList.append($story);
+    olEl.append($story);
   }
 
-  $allStoriesList.show();
+  olEl.show();
 }
+
+/**  */
+
+async function submitNewStory(evt) {
+  evt.preventDefault();
+
+  const author = $('#story-author').val();
+  const title = $('#story-title').val();
+  const url = $('#story-url').val();
+
+  $storyForm.trigger('reset');
+
+  await StoryList.addStory(currentUser, 
+    {title, author, url});
+
+  storyList = await StoryList.getStories();
+  putStoriesOnPage($submitStoriesList);                      
+}
+
+$storyForm.on("submit", submitNewStory);
