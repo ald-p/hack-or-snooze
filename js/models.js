@@ -213,4 +213,55 @@ class User {
       return null;
     }
   }
+
+  /** add a favorite story to currentUser 
+   * Return a new User object with updated favorites array
+   */
+
+  static async addFavorite({username, loginToken}, storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      method: "POST",
+      params: { token: loginToken },
+    });
+    
+    let { user } = response.data;
+
+    return new User(
+      {
+        username: user.username,
+        name: user.name,
+        createdAt: user.createdAt,
+        favorites: user.favorites,
+        ownStories: user.stories
+      },
+      loginToken
+    );
+  }
+
+  /** Delete a favorite story to currentUser 
+   * Return a new User object with updated favorites array
+   */
+
+  static async deleteFavorite({username, loginToken}, storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      method: "DELETE",
+      params: { token: loginToken },
+    });
+    
+    let { user } = response.data;
+
+    return new User(
+      {
+        username: user.username,
+        name: user.name,
+        createdAt: user.createdAt,
+        favorites: user.favorites,
+        ownStories: user.stories
+      },
+      loginToken
+    );
+  }
+   
 }
