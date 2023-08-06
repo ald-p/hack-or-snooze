@@ -114,3 +114,18 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+/**  */
+async function toggleStoryFavorite(evt) {
+  const storyId = $(this).parent().attr('id');
+  if ($(this).hasClass( "fa-regular" )) {
+    $(this).toggleClass("fa-regular fa-solid")
+    currentUser = await User.addFavorite(currentUser, storyId);
+  } else {
+    $(this).toggleClass("fa-regular fa-solid");
+    currentUser = await User.deleteFavorite(currentUser, storyId);
+    putFavoriteStoriesOnPage();
+  }
+}
+
+$storiesList.on('click', 'i', toggleStoryFavorite);

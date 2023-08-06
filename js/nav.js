@@ -20,11 +20,20 @@ function navSubmitClick(evt) {
   console.debug("navSubmitClick", evt);
   hidePageComponents();
   $storyForm.show();
-  //$submitStoriesList.show();
   putStoriesOnPage($submitStoriesList);
 }
 
 $navSubmit.on("click", navSubmitClick);
+
+/** Show story form on click on "favorites" */
+
+function navFavoritesClick(evt) {
+  console.debug("navFavoritesClick", evt);
+  hidePageComponents();
+  putFavoriteStoriesOnPage();
+}
+
+$navFavorites.on("click", navFavoritesClick);
 
 /** Show login/signup on click on "login" */
 

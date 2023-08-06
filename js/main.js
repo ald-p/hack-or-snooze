@@ -3,16 +3,22 @@
 // So we don't have to keep re-finding things on page, find DOM elements once:
 
 const $body = $("body");
+const $storiesList = $(".stories-list");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
+
 const $storyForm = $('#new-story-form');
 const $submitStoriesList = $('#submit-stories-list');
+
+const $favoritesList = $('#favorites-list');
+const $star = $('i');
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 
 const $navSubmit = $('#nav-submit');
+const $navFavorites = $('#nav-favorites');
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
@@ -28,7 +34,8 @@ function hidePageComponents() {
     $loginForm,
     $signupForm,
     $storyForm,
-    $submitStoriesList
+    $submitStoriesList,
+    $favoritesList
   ];
   components.forEach(c => c.hide());
 }

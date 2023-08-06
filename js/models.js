@@ -264,4 +264,10 @@ class User {
     );
   }
    
+  isFavorite(storyId) {
+    for (let favorite of this.favorites) {
+      if (favorite.storyId === storyId) return true;
+    }
+    return false;
+  }
 }

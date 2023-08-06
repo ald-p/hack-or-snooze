@@ -20,11 +20,14 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.debug("generateStoryMarkup", story);
+
+  const userLoggedIn = Boolean(currentUser);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        ${userLoggedIn ? generateStarMarkup(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -33,6 +36,17 @@ function generateStoryMarkup(story) {
         <small class="story-user">posted by ${story.username}</small>
       </li>
     `);
+}
+
+/**  */
+function generateStarMarkup(story, user) {
+  const isStoryFavorite = user.isFavorite(story.storyId);
+
+  if (isStoryFavorite) {
+    return `<i class="fa-solid fa-star"></i>`;
+  } else {
+    return `<i class="fa-regular fa-star"></i>`
+  }
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -51,7 +65,29 @@ function putStoriesOnPage(olEl) {
   olEl.show();
 }
 
-/**  */
+/** Gets list of favorite stories from server, generates their HTML, and puts on page. */
+
+function putFavoriteStoriesOnPage() {
+  console.debug("putFavoriteStoriesOnPage");
+
+  $favoritesList.empty();
+
+  const { favorites } = currentUser;
+
+  if (favorites.length == 0) {
+    $favoritesList.append('<h5>No favorites added!</h5>');
+  } else {
+    // loop through all of our stories and generate HTML for them
+    for (let story of favorites) {
+      const $story = generateStoryMarkup(story);
+      $favoritesList.append($story);
+    }
+  }
+
+  $favoritesList.show();
+}
+
+/** Gets values of new story form when submitted, adds to story list on the server, gets new story list from the server, and shows */
 
 async function submitNewStory(evt) {
   evt.preventDefault();
