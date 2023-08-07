@@ -7,7 +7,8 @@
 .stories-list > li {
   color: gray;
   font-size: 0.8rem;
-  margin: 10px 0;
+  padding: 1rem;
+  border-bottom: 1px solid lightgrey;
 }
 
 #stories-loading-msg {
@@ -18,6 +19,10 @@
 
 
 /* Individual stories */
+
+.star {
+  margin: 0 5px;
+}
 
 .story-link {
   color: black;
@@ -31,9 +36,14 @@
 }
 
 .story-author {
-  margin-left: 2em;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+  color: green;
 }
 
 .story-user {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
   display: block;
+  color: orange;
 }

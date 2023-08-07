@@ -1,8 +1,9 @@
 /* General typography */
 
+
 body {
   font-family: Arimo, sans-serif;
-  margin: 8px 7.5vw;
+  margin: 0;
 }
 
 h1 {
