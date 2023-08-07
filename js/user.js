@@ -145,3 +145,13 @@ async function deleteBtnClicked(evt) {
 }
 
 $ownStoriesList.on("click", ".delete", deleteBtnClicked)
+
+/** Show user profile  */
+function showUserProfile() {
+  $userProfile.append(`
+    <h3>User Profile Info</h3>
+    <div>Name: ${currentUser.name}</div>
+    <div>Username: ${currentUser.username}</div>
+    <div>Date Created: ${currentUser.createdAt.slice(0,10)} </div>
+  `)
+}

@@ -19,6 +19,8 @@ const $ownStoriesList = $('#own-stories-list');
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 
+const $userProfile = $('#user-profile');
+
 const $navSubmit = $('#nav-submit');
 const $navFavorites = $('#nav-favorites');
 const $navOwnStories = $('#nav-my-stories')

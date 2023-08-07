@@ -67,3 +67,14 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
+
+/** Show user profile when username is clicked */
+
+function navUserProfileClicked(evt) {
+  console.debug("navUserProfileClicked", evt);
+  hidePageComponents();
+  $userProfile.show();
+  showUserProfile();
+}
+
+$navUserProfile.on("click", navUserProfileClicked);
