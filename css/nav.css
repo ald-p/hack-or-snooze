@@ -21,3 +21,8 @@ nav {
   margin-left: auto;
   text-align: right;
 }
+
+.navbar .nav-link {
+  border-left: 1.5px solid black;
+  padding-left: 8px;
+}

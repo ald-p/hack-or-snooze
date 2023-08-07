@@ -19,15 +19,16 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-function generateStoryMarkup(story) {
+function generateStoryMarkup(story, showDelete = false) {
   console.debug("generateStoryMarkup", story);
 
-  const userLoggedIn = Boolean(currentUser);
+  const showStar = Boolean(currentUser);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        ${userLoggedIn ? generateStarMarkup(story, currentUser) : ""}
+        ${showDelete ? generateDeleteMarkup(story, currentUser) : ""}
+        ${showStar ? generateStarMarkup(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -38,15 +39,23 @@ function generateStoryMarkup(story) {
     `);
 }
 
-/**  */
-function generateStarMarkup(story, user) {
-  const isStoryFavorite = user.isFavorite(story.storyId);
+/** Generates star icon HTML based on if the story is a favorite */
 
-  if (isStoryFavorite) {
-    return `<i class="fa-solid fa-star"></i>`;
+function generateStarMarkup(story, user) {
+  if (user.isFavorite(story.storyId)) {
+    return `<i class="fa-solid fa-star star"></i>`;
   } else {
-    return `<i class="fa-regular fa-star"></i>`
+    return `<i class="fa-regular fa-star star"></i>`
   }
+}
+
+/** Generates delete icon HTML based on if the story is a user's own story */
+
+function generateDeleteMarkup(story, user) {
+  if (user.isOwnStory(story.storyId)) {
+    return `<i class="fa-solid fa-trash-can delete"></i>`;
+  }
+  return '';
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -87,6 +96,28 @@ function putFavoriteStoriesOnPage() {
   $favoritesList.show();
 }
 
+/** Gets list of ownStories from server, generates their HTML, and puts on page. */
+
+function putOwnStoriesOnPage() {
+  console.debug("putOwnStoriesOnPage");
+
+  $ownStoriesList.empty();
+
+  const { ownStories } = currentUser;
+
+  if (ownStories.length == 0) {
+    $ownStoriesList.append('<h5>No stories added!</h5>');
+  } else {
+    // loop through all of our stories and generate HTML for them
+    for (let story of ownStories) {
+      const $story = generateStoryMarkup(story, true);
+      $ownStoriesList.append($story);
+    }
+  }
+
+  $ownStoriesList.show();
+}
+
 /** Gets values of new story form when submitted, adds to story list on the server, gets new story list from the server, and shows */
 
 async function submitNewStory(evt) {
@@ -102,7 +133,9 @@ async function submitNewStory(evt) {
     {title, author, url});
 
   storyList = await StoryList.getStories();
-  putStoriesOnPage($submitStoriesList);                      
+  putStoriesOnPage($submitStoriesList); 
+  
+  currentUser = await User.getUser(currentUser);
 }
 
 $storyForm.on("submit", submitNewStory);

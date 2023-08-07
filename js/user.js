@@ -110,12 +110,14 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
-  $allStoriesList.show();
+  putStoriesOnPage($allStoriesList);
 
   updateNavOnLogin();
 }
 
-/**  */
+/** Toggle star class when clicked
+ */
+
 async function toggleStoryFavorite(evt) {
   const storyId = $(this).parent().attr('id');
   if ($(this).hasClass( "fa-regular" )) {
@@ -124,8 +126,21 @@ async function toggleStoryFavorite(evt) {
   } else {
     $(this).toggleClass("fa-regular fa-solid");
     currentUser = await User.deleteFavorite(currentUser, storyId);
-    putFavoriteStoriesOnPage();
   }
 }
 
-$storiesList.on('click', 'i', toggleStoryFavorite);
+$storiesList.on('click', '.star', toggleStoryFavorite);
+
+/** delete a story when trash icon is clicked */
+
+async function deleteBtnClicked(evt) {
+  const storyId = $(this).parent().attr('id');
+  await User.deleteStory(storyId, currentUser);
+
+  storyList = await StoryList.getStories();
+  currentUser = await User.getUser(currentUser);
+  
+  putOwnStoriesOnPage();
+}
+
+$ownStoriesList.on("click", ".delete", deleteBtnClicked)

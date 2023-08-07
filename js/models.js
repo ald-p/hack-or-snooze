@@ -214,6 +214,29 @@ class User {
     }
   }
 
+  /** gets most up to date currentUser object */
+
+  static async getUser({username, loginToken}) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${username}`,
+      method: "GET",
+      params: { token: loginToken}
+    });
+    
+    let { user } = response.data;
+
+    return new User(
+      {
+        username: user.username,
+        name: user.name,
+        createdAt: user.createdAt,
+        favorites: user.favorites,
+        ownStories: user.stories
+      },
+      loginToken
+    );
+  }
+
   /** add a favorite story to currentUser 
    * Return a new User object with updated favorites array
    */
@@ -264,9 +287,48 @@ class User {
     );
   }
    
+  /** Function to determine if a story is a user favorite
+   * Return boolean
+   */
+
   isFavorite(storyId) {
     for (let favorite of this.favorites) {
       if (favorite.storyId === storyId) return true;
+    }
+    return false;
+  }
+
+  /** Communicate with API to delete story
+   * Returns the deleted Story object
+   */
+  static async deleteStory(storyId, {loginToken}) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      params: { token: loginToken}
+    })
+
+    let { story } = response.data;
+
+    return new Story(
+      {
+        storyId: story.storyId,
+        title: story.title,
+        author: story.author, 
+        url: story.url, 
+        username: story.username, 
+        createdAt: story.createdAt
+      }
+    )
+  }
+
+  /** Function to determine if a story is a user generated story
+ * Return boolean
+ */
+
+  isOwnStory(storyId) {
+    for (let story of this.ownStories) {
+      if (story.storyId === storyId) return true;
     }
     return false;
   }
